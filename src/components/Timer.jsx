@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 //   days: "00",
 // };
 
-const Timer = ({ timeInput }) => {
+// const Timer = ({ timeInput }) => {
 //   const [remaining, setRemaining] = useState(defaultTime);
 
 //   useEffect(() => {
@@ -18,7 +18,7 @@ const Timer = ({ timeInput }) => {
 //     }, 1000);
 //     return () => clearInterval(timeout);
 //   }, []);
-  
+
 //   const callTimer = (timeInput) => {
 //     if (timeInput > 0) {
 //       setRemaining(calcTime(timeInput));
@@ -57,9 +57,19 @@ const Timer = ({ timeInput }) => {
 //     </div>
 //   );
 // };
+// };
 
-const [futureDate, setFutureDate] = useState('');
+const Timer = () => {
+
+  const [futureDate, setFutureDate] = useState('');
   const [timeLeft, setTimeLeft] = useState(0);
+
+  //Date Limit
+  const currentDate = new Date();
+  const maxDate = new Date(currentDate);
+  maxDate.setDate(currentDate.getDate() + 60);
+  let limit = `${maxDate.getFullYear().toString().padStart(2, '0')}-${maxDate.getMonth().toString().padStart(2, '0')}-${maxDate.getDate().toString().padStart(2, '0')}`
+
 
   const calculateTimeLeft = () => {
     const difference = +new Date(futureDate) - +new Date();
@@ -67,6 +77,9 @@ const [futureDate, setFutureDate] = useState('');
   };
 
   useEffect(() => {
+    console.log(limit);
+    console.log(maxDate);
+
     const timer = setTimeout(() => {
       calculateTimeLeft();
     }, 1000);
@@ -104,9 +117,12 @@ const [futureDate, setFutureDate] = useState('');
       <h1>Countdown Timer</h1>
       <input
         type="datetime-local"
+        id="meeting-time"
+        name="meeting-time"
         value={futureDate}
-        onChange={(e) => setFutureDate(e.target.value)}
-      />
+        min="2018-06-07T00:00"
+        max={`${limit}T00:00`}
+        onChange={(e) => setFutureDate(e.target.value)} />
       <div className="countdown-container">
         <div className="countdown-item">
           <div className="countdown-value">{days}</div>
